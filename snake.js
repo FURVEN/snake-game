@@ -12,8 +12,28 @@ function resetGame() {
     draw();
 }
 
+function drawGrid() {
+    ctx.save();
+    ctx.strokeStyle = '#333';
+    ctx.lineWidth = 1;
+    for (let x = 0; x <= canvas.width; x += box) {
+        ctx.beginPath();
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, canvas.height);
+        ctx.stroke();
+    }
+    for (let y = 0; y <= canvas.height; y += box) {
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(canvas.width, y);
+        ctx.stroke();
+    }
+    ctx.restore();
+}
+
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    drawGrid();
     for (let i = 0; i < snake.length; i++) {
         if (i === 0) {
             // 머리: 삼각형 방향 표시
