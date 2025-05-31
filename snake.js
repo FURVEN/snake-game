@@ -15,8 +15,38 @@ function resetGame() {
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     for (let i = 0; i < snake.length; i++) {
-        ctx.fillStyle = i === 0 ? '#0f0' : '#fff';
-        ctx.fillRect(snake[i].x, snake[i].y, box, box);
+        if (i === 0) {
+            // 머리: 삼각형 방향 표시
+            ctx.fillStyle = '#0f0';
+            ctx.beginPath();
+            const x = snake[i].x + box / 2;
+            const y = snake[i].y + box / 2;
+            if (direction === 'RIGHT') {
+                ctx.moveTo(x + box / 2, y);
+                ctx.lineTo(x - box / 2, y - box / 2);
+                ctx.lineTo(x - box / 2, y + box / 2);
+            } else if (direction === 'LEFT') {
+                ctx.moveTo(x - box / 2, y);
+                ctx.lineTo(x + box / 2, y - box / 2);
+                ctx.lineTo(x + box / 2, y + box / 2);
+            } else if (direction === 'UP') {
+                ctx.moveTo(x, y - box / 2);
+                ctx.lineTo(x - box / 2, y + box / 2);
+                ctx.lineTo(x + box / 2, y + box / 2);
+            } else if (direction === 'DOWN') {
+                ctx.moveTo(x, y + box / 2);
+                ctx.lineTo(x - box / 2, y - box / 2);
+                ctx.lineTo(x + box / 2, y - box / 2);
+            }
+            ctx.closePath();
+            ctx.fill();
+        } else {
+            // 몸통: 원형
+            ctx.fillStyle = '#fff';
+            ctx.beginPath();
+            ctx.arc(snake[i].x + box / 2, snake[i].y + box / 2, box / 2.2, 0, Math.PI * 2);
+            ctx.fill();
+        }
     }
     ctx.fillStyle = '#f00';
     ctx.fillRect(food.x, food.y, box, box);
@@ -70,8 +100,6 @@ function spawnFood() {
     return { x, y };
 }
 
-// 이벤트 리스너 한 번만 등록
-// (중복 방지 위해 익명함수 대신 명시적 함수명 사용)
 document.addEventListener('keydown', function handleKey(e) {
     if (!started && ['ArrowLeft','ArrowUp','ArrowRight','ArrowDown'].includes(e.key)) {
         started = true;
