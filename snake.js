@@ -75,4 +75,14 @@ document.addEventListener('keydown', e => {
 });
 
 draw();
-gameInterval = setInterval(update, 120);
+let started = false;
+document.addEventListener('keydown', e => {
+    if (!started && ['ArrowLeft','ArrowUp','ArrowRight','ArrowDown'].includes(e.key)) {
+        started = true;
+        gameInterval = setInterval(update, 120);
+    }
+    if (e.key === 'ArrowLeft' && direction !== 'RIGHT') direction = 'LEFT';
+    else if (e.key === 'ArrowUp' && direction !== 'DOWN') direction = 'UP';
+    else if (e.key === 'ArrowRight' && direction !== 'LEFT') direction = 'RIGHT';
+    else if (e.key === 'ArrowDown' && direction !== 'UP') direction = 'DOWN';
+});
